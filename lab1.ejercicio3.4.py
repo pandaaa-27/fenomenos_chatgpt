@@ -14,82 +14,113 @@ st.set_page_config(
     layout="wide"
 )
 
-# --- Inyección de CSS para modo oscuro premium ---
+# --- Inyección de CSS mejorada para modo oscuro premium ---
 st.markdown("""
 <style>
     /* Fondo general oscuro */
     .stApp {
-        background-color: #0a0a0a;
+        background-color: #0a0a0a !important;
     }
     
     /* Sidebar oscuro */
-    .css-1d391kg {
+    .css-1d391kg, .st-emotion-cache-1d391kg {
         background-color: #141414 !important;
     }
     
     /* Títulos en blanco puro */
-    h1, h2, h3, h4, h5, h6 {
+    h1, h2, h3, h4, h5, h6, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
         color: #ffffff !important;
         font-weight: 600 !important;
     }
     
-    /* Texto de métricas en blanco puro */
-    .stMetric {
+    /* Texto normal en gris claro */
+    p, li, .stMarkdown, .stCaption {
+        color: #cccccc !important;
+    }
+    
+    /* Métricas - VALORES en cian neón */
+    div[data-testid="metric-container"] {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%) !important;
+        border: 1px solid #00f0ff !important;
+        border-radius: 10px !important;
+        padding: 15px !important;
+        box-shadow: 0 0 30px rgba(0, 240, 255, 0.05) !important;
+    }
+    
+    div[data-testid="metric-container"] label {
+        color: #b0b0b0 !important;
+        font-size: 14px !important;
+    }
+    
+    div[data-testid="metric-container"] div[data-testid="metric-value"] {
+        color: #00f0ff !important;
+        font-size: 28px !important;
+        font-weight: 700 !important;
+        text-shadow: 0 0 30px rgba(0, 240, 255, 0.2) !important;
+    }
+    
+    /* Sliders en cian */
+    .stSlider .stSliderLabel {
         color: #ffffff !important;
     }
     
-    /* Valores de métricas en cian neón */
-    .stMetric .css-1xarl3l {
-        color: #00f0ff !important;
-        font-weight: 700 !important;
-        text-shadow: 0 0 20px rgba(0, 240, 255, 0.3) !important;
+    .stSlider div[data-baseweb="slider"] div[role="slider"] {
+        background-color: #00f0ff !important;
+        border-color: #00f0ff !important;
     }
     
-    /* Labels de métricas en gris claro */
-    .stMetric .css-1d391kg {
-        color: #b0b0b0 !important;
+    .stSlider div[data-baseweb="slider"] div[data-testid="track"] {
+        background-color: #00f0ff !important;
     }
     
-    /* Sliders con estilo cian */
-    .stSlider .css-1c36l6u {
-        color: #00f0ff !important;
-    }
-    
-    /* Inputs numéricos */
+    /* Number inputs */
     .stNumberInput input {
         background-color: #1a1a1a !important;
         color: #00f0ff !important;
         border: 1px solid #00f0ff !important;
+        border-radius: 5px !important;
+    }
+    
+    .stNumberInput label {
+        color: #ffffff !important;
     }
     
     /* Botones */
     .stButton button {
-        background-color: #00f0ff !important;
+        background: linear-gradient(135deg, #00f0ff 0%, #0088cc 100%) !important;
         color: #0a0a0a !important;
         font-weight: 700 !important;
         border: none !important;
+        border-radius: 8px !important;
         transition: all 0.3s ease !important;
+        padding: 10px 20px !important;
     }
     
     .stButton button:hover {
-        background-color: #00d0e0 !important;
         transform: scale(1.05) !important;
-        box-shadow: 0 0 30px rgba(0, 240, 255, 0.4) !important;
+        box-shadow: 0 0 40px rgba(0, 240, 255, 0.4) !important;
+        background: linear-gradient(135deg, #00ffff 0%, #0099dd 100%) !important;
     }
     
     /* Pestañas en cian neón */
     .stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p {
         color: #00f0ff !important;
         font-weight: 600 !important;
+        font-size: 16px !important;
     }
     
     .stTabs [data-baseweb="tab-list"] button[aria-selected="true"] {
         border-bottom: 3px solid #00f0ff !important;
+        background-color: rgba(0, 240, 255, 0.05) !important;
     }
     
-    /* Sección de ecuaciones con cian */
+    .stTabs [data-baseweb="tab-list"] button {
+        background-color: transparent !important;
+    }
+    
+    /* Ecuaciones - caja con borde cian */
     .equation-box {
-        background-color: #0a0a0a !important;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%) !important;
         border: 2px solid #00f0ff !important;
         border-radius: 10px !important;
         padding: 20px !important;
@@ -97,12 +128,21 @@ st.markdown("""
         box-shadow: 0 0 30px rgba(0, 240, 255, 0.1) !important;
     }
     
-    /* Caja de Taylor con texto amarillo neón */
+    .equation-box h4 {
+        color: #00f0ff !important;
+        margin-top: 15px !important;
+    }
+    
+    .equation-box p {
+        color: #cccccc !important;
+    }
+    
+    /* Caja de Taylor - texto amarillo neón */
     .taylor-box {
-        background-color: #0a0a0a !important;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%) !important;
         border: 2px solid #00f0ff !important;
         border-radius: 10px !important;
-        padding: 25px !important;
+        padding: 30px !important;
         margin: 20px 0 !important;
         text-align: center !important;
         box-shadow: 0 0 40px rgba(0, 240, 255, 0.15) !important;
@@ -113,6 +153,30 @@ st.markdown("""
         font-size: 28px !important;
         font-weight: 700 !important;
         text-shadow: 0 0 30px rgba(255, 255, 0, 0.3) !important;
+    }
+    
+    /* Tablas en modo oscuro */
+    .dataframe {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+        border-collapse: collapse !important;
+    }
+    
+    .dataframe thead tr th {
+        background-color: #00f0ff !important;
+        color: #0a0a0a !important;
+        font-weight: 700 !important;
+        padding: 10px !important;
+    }
+    
+    .dataframe tbody tr td {
+        border: 1px solid #333333 !important;
+        color: #ffffff !important;
+        padding: 8px !important;
+    }
+    
+    .dataframe tbody tr:hover {
+        background-color: rgba(0, 240, 255, 0.05) !important;
     }
     
     /* Scrollbar personalizada */
@@ -131,41 +195,57 @@ st.markdown("""
         background: #00d0e0;
     }
     
-    /* Tablas en modo oscuro */
-    .dataframe {
+    /* Selectbox en modo oscuro */
+    .stSelectbox div[data-baseweb="select"] {
         background-color: #1a1a1a !important;
         color: #ffffff !important;
-        border-collapse: collapse !important;
     }
     
-    .dataframe th {
-        background-color: #00f0ff !important;
-        color: #0a0a0a !important;
-        font-weight: 700 !important;
-    }
-    
-    .dataframe td {
-        border: 1px solid #333333 !important;
+    /* Checkbox */
+    .stCheckbox label {
         color: #ffffff !important;
     }
     
-    /* Estilo para métricas dentro de la página */
-    .metric-container {
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-        border: 1px solid #00f0ff;
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.05);
+    /* Expander */
+    .streamlit-expanderHeader {
+        color: #ffffff !important;
+        background-color: #1a1a1a !important;
+        border: 1px solid #00f0ff !important;
+        border-radius: 5px !important;
     }
     
-    .metric-label {
+    /* Info, Warning, Success, Error boxes */
+    .stAlert {
+        background-color: #1a1a1a !important;
+        border-left: 4px solid #00f0ff !important;
+    }
+    
+    .stAlert div {
+        color: #ffffff !important;
+    }
+    
+    /* Captions y textos pequeños */
+    .stCaption, .caption {
+        color: #888888 !important;
+    }
+    
+    /* Métricas custom (para velocidad promedio) */
+    .custom-metric {
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%) !important;
+        border: 1px solid #00f0ff !important;
+        border-radius: 10px !important;
+        padding: 15px !important;
+        margin: 10px 0 !important;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.05) !important;
+    }
+    
+    .custom-metric .label {
         color: #b0b0b0 !important;
         font-size: 14px !important;
         font-weight: 400 !important;
     }
     
-    .metric-value {
+    .custom-metric .value {
         color: #00f0ff !important;
         font-size: 28px !important;
         font-weight: 700 !important;
@@ -231,10 +311,8 @@ def find_critical_delta(R, rho, mu, g, delta_range):
     # Interpolación para encontrar delta al 5%
     valid_indices = [i for i, e in enumerate(errors) if e > 5]
     if valid_indices and errors[0] > 5:
-        # Buscar el punto donde cruza 5%
         for i in range(len(errors) - 1):
             if errors[i] >= 5 and errors[i+1] <= 5:
-                # Interpolación lineal
                 delta_i = deltas[i]
                 delta_j = deltas[i+1]
                 error_i = errors[i]
@@ -265,7 +343,6 @@ def create_3d_visualization(R, delta):
     z_film_grid = z_film_grid
     
     # Flechas de velocidad (conos)
-    # Posiciones de los conos en la película
     n_arrows = 4
     arrow_positions = []
     for i in range(n_arrows):
@@ -279,48 +356,55 @@ def create_3d_visualization(R, delta):
     # Crear figura
     fig = go.Figure()
     
-    # Cilindro interno (tubo) - opaco
+    # Cilindro interno (tubo) - gris oscuro con gradiente
     fig.add_trace(go.Surface(
         x=x_tube, y=y_tube, z=z_tube,
-        colorscale=[[0, '#444444'], [1, '#666666']],
+        colorscale=[[0, '#333333'], [0.5, '#555555'], [1, '#777777']],
         opacity=1.0,
         showscale=False,
-        name='Tubo interno'
+        name='Tubo interno',
+        hovertemplate='<b>Tubo interno</b><br>Radio: %{x:.3f}<extra></extra>'
     ))
     
     # Película líquida - translúcida cian
     fig.add_trace(go.Surface(
         x=x_film, y=y_film, z=z_film_grid,
-        colorscale=[[0, '#00f0ff'], [1, '#0088ff']],
-        opacity=0.3,
+        colorscale=[[0, 'rgba(0, 240, 255, 0.2)'], [0.5, 'rgba(0, 200, 255, 0.3)'], [1, 'rgba(0, 150, 255, 0.4)']],
+        opacity=0.4,
         showscale=False,
-        name='Película líquida'
+        name='Película líquida',
+        hovertemplate='<b>Película líquida</b><br>Radio: %{x:.3f}<extra></extra>'
     ))
     
-    # Flechas de velocidad (conos)
+    # Flechas de velocidad (conos) - verde neón
     for x, y, z in arrow_positions:
         fig.add_trace(go.Cone(
             x=[x], y=[y], z=[z],
             u=[0], v=[0], w=[-0.3],
-            colorscale=[[0, '#00ff00'], [1, '#00ff00']],
+            colorscale=[[0, '#00ff00'], [1, '#00ff88']],
             showscale=False,
             name='Dirección del flujo',
             sizemode='absolute',
             sizeref=0.2,
+            hovertemplate='<b>Flujo descendente</b><extra></extra>'
         ))
     
     # Layout
     fig.update_layout(
         scene=dict(
-            xaxis=dict(title='X', color='#ffffff', gridcolor='#333333'),
-            yaxis=dict(title='Y', color='#ffffff', gridcolor='#333333'),
-            zaxis=dict(title='Z', color='#ffffff', gridcolor='#333333'),
+            xaxis=dict(title='X', color='#ffffff', gridcolor='#333333', backgroundcolor='#0a0a0a'),
+            yaxis=dict(title='Y', color='#ffffff', gridcolor='#333333', backgroundcolor='#0a0a0a'),
+            zaxis=dict(title='Z', color='#ffffff', gridcolor='#333333', backgroundcolor='#0a0a0a'),
             bgcolor='#0a0a0a',
             aspectmode='data',
+            camera=dict(
+                eye=dict(x=1.5, y=1.5, z=0.5),
+                up=dict(x=0, y=0, z=1)
+            )
         ),
         paper_bgcolor='#0a0a0a',
         plot_bgcolor='#0a0a0a',
-        font=dict(color='#ffffff'),
+        font=dict(color='#ffffff', family='Arial, sans-serif'),
         margin=dict(l=0, r=0, t=20, b=0),
         showlegend=False,
         height=500,
@@ -336,37 +420,83 @@ def create_velocity_profile(R, delta, rho, mu, g):
     
     fig = go.Figure()
     
-    # Perfil con relleno
+    # Perfil con relleno cian translúcido
     fig.add_trace(go.Scatter(
-        x=r_vals * 1000,  # Convertir a mm
+        x=r_vals * 1000,
         y=vz_vals,
         fill='tozeroy',
-        fillcolor='rgba(0, 240, 255, 0.2)',
+        fillcolor='rgba(0, 240, 255, 0.15)',
         line=dict(color='#00f0ff', width=3),
-        name='v_z(r)'
+        name='v_z(r)',
+        hovertemplate='<b>r = %{x:.2f} mm</b><br>v_z = %{y:.4f} m/s<extra></extra>'
     ))
     
-    # Línea vertical para R
-    fig.add_vline(x=R*1000, line_dash="dash", line_color="#ffffff", 
-                  annotation_text=f"R = {R*1000:.1f} mm", 
-                  annotation_position="top")
+    # Línea vertical para R (pared del tubo)
+    fig.add_vline(
+        x=R*1000, 
+        line_dash="dash", 
+        line_color="#ffffff",
+        annotation_text=f"<b>R = {R*1000:.1f} mm</b>",
+        annotation_position="top",
+        annotation_font=dict(color='#ffffff', size=12)
+    )
     
-    # Línea vertical para R+delta
-    fig.add_vline(x=(R+delta)*1000, line_dash="dash", line_color="#00f0ff",
-                  annotation_text=f"R+δ = {(R+delta)*1000:.1f} mm",
-                  annotation_position="bottom")
+    # Línea vertical para R+delta (superficie libre)
+    fig.add_vline(
+        x=(R+delta)*1000, 
+        line_dash="dash", 
+        line_color="#00f0ff",
+        annotation_text=f"<b>R+δ = {(R+delta)*1000:.1f} mm</b>",
+        annotation_position="bottom",
+        annotation_font=dict(color='#00f0ff', size=12)
+    )
+    
+    # Añadir punto de velocidad máxima
+    v_max = max_velocity(R, delta, rho, mu, g)
+    fig.add_trace(go.Scatter(
+        x=[(R+delta)*1000],
+        y=[v_max],
+        mode='markers',
+        marker=dict(color='#ffff00', size=12, symbol='star', line=dict(color='#ffffff', width=2)),
+        name='Vz máx',
+        hovertemplate='<b>Vz máx = %{y:.4f} m/s</b><extra></extra>'
+    ))
     
     fig.update_layout(
-        title=dict(text='Perfil de Velocidad Radial Vz(r)', font=dict(color='#ffffff', size=20)),
-        xaxis=dict(title='r [mm]', color='#ffffff', gridcolor='#333333'),
-        yaxis=dict(title='v_z [m/s]', color='#ffffff', gridcolor='#333333'),
+        title=dict(
+            text='<b>Perfil de Velocidad Radial Vz(r)</b>',
+            font=dict(color='#ffffff', size=20),
+            x=0.5
+        ),
+        xaxis=dict(
+            title='<b>r [mm]</b>',
+            color='#ffffff',
+            gridcolor='#333333',
+            gridwidth=1,
+            zerolinecolor='#444444',
+            title_font=dict(size=14)
+        ),
+        yaxis=dict(
+            title='<b>v_z [m/s]</b>',
+            color='#ffffff',
+            gridcolor='#333333',
+            gridwidth=1,
+            zerolinecolor='#444444',
+            title_font=dict(size=14)
+        ),
         paper_bgcolor='#0a0a0a',
         plot_bgcolor='#0a0a0a',
-        font=dict(color='#ffffff'),
+        font=dict(color='#ffffff', family='Arial, sans-serif'),
         showlegend=True,
-        legend=dict(font=dict(color='#ffffff')),
+        legend=dict(
+            font=dict(color='#ffffff'),
+            bgcolor='rgba(10, 10, 10, 0.8)',
+            bordercolor='#00f0ff',
+            borderwidth=1
+        ),
         height=400,
-        margin=dict(l=60, r=40, t=50, b=60),
+        margin=dict(l=60, r=40, t=60, b=60),
+        hovermode='x'
     )
     
     return fig
@@ -395,80 +525,143 @@ def create_taylor_plots(R, rho, mu, g, current_delta):
     
     # Gráfica A: Comparación de flujos másicos
     fig1 = go.Figure()
+    
+    # Línea exacta - cian neón
     fig1.add_trace(go.Scatter(
         x=deltas*1000, y=m_exact_list,
         mode='lines',
-        name='ṁ exacto',
-        line=dict(color='#00f0ff', width=3)
+        name='<b>ṁ exacto</b>',
+        line=dict(color='#00f0ff', width=3),
+        hovertemplate='<b>δ = %{x:.3f} mm</b><br>ṁ exacto = %{y:.6e} kg/s<extra></extra>'
     ))
+    
+    # Línea Taylor - rojo neón
     fig1.add_trace(go.Scatter(
         x=deltas*1000, y=m_taylor_list,
         mode='lines',
-        name='ṁ Taylor',
-        line=dict(color='#ff6b6b', width=3, dash='dash')
+        name='<b>ṁ Taylor</b>',
+        line=dict(color='#ff6b6b', width=3, dash='dash'),
+        hovertemplate='<b>δ = %{x:.3f} mm</b><br>ṁ Taylor = %{y:.6e} kg/s<extra></extra>'
     ))
-    # Marcador del punto actual
+    
+    # Marcador del punto actual - amarillo neón
     m_exact_current = mass_flow_exact(R, current_delta, rho, mu, g)
     m_taylor_current = mass_flow_taylor(R, current_delta, rho, mu, g)
     fig1.add_trace(go.Scatter(
         x=[current_delta*1000],
         y=[m_exact_current],
         mode='markers',
-        name='Operación actual',
-        marker=dict(color='#ffff00', size=15, symbol='circle', line=dict(color='#ffffff', width=2))
+        name='<b>Operación actual</b>',
+        marker=dict(
+            color='#ffff00', 
+            size=15, 
+            symbol='circle', 
+            line=dict(color='#ffffff', width=3)
+        ),
+        hovertemplate='<b>δ = %{x:.3f} mm</b><br>ṁ = %{y:.6e} kg/s<extra></extra>'
     ))
     
     fig1.update_layout(
-        title=dict(text='Flujo Másico vs Espesor de Película', font=dict(color='#ffffff', size=18)),
-        xaxis=dict(title='δ [mm]', color='#ffffff', gridcolor='#333333'),
-        yaxis=dict(title='ṁ [kg/s]', color='#ffffff', gridcolor='#333333'),
+        title=dict(
+            text='<b>Flujo Másico vs Espesor de Película</b>',
+            font=dict(color='#ffffff', size=18),
+            x=0.5
+        ),
+        xaxis=dict(
+            title='<b>δ [mm]</b>',
+            color='#ffffff',
+            gridcolor='#333333',
+            title_font=dict(size=14)
+        ),
+        yaxis=dict(
+            title='<b>ṁ [kg/s]</b>',
+            color='#ffffff',
+            gridcolor='#333333',
+            title_font=dict(size=14)
+        ),
         paper_bgcolor='#0a0a0a',
         plot_bgcolor='#0a0a0a',
-        font=dict(color='#ffffff'),
-        legend=dict(font=dict(color='#ffffff')),
+        font=dict(color='#ffffff', family='Arial, sans-serif'),
+        legend=dict(
+            font=dict(color='#ffffff'),
+            bgcolor='rgba(10, 10, 10, 0.8)',
+            bordercolor='#00f0ff',
+            borderwidth=1
+        ),
         height=350,
         margin=dict(l=60, r=40, t=50, b=60),
+        hovermode='x'
     )
     
     # Gráfica B: Error relativo
     fig2 = go.Figure()
+    
+    # Error con relleno rosa neón
     fig2.add_trace(go.Scatter(
         x=deltas*1000, y=errors,
         mode='lines',
-        name='Error relativo',
+        name='<b>Error relativo</b>',
         fill='tozeroy',
-        fillcolor='rgba(255, 105, 180, 0.3)',
-        line=dict(color='#ff69b4', width=3)
+        fillcolor='rgba(255, 105, 180, 0.2)',
+        line=dict(color='#ff69b4', width=3),
+        hovertemplate='<b>δ = %{x:.3f} mm</b><br>Error = %{y:.2f} %<extra></extra>'
     ))
-    # Línea de 5%
-    fig2.add_hline(y=5, line_dash="dash", line_color="#ffff00",
-                   annotation_text="5%", annotation_position="top right")
+    
+    # Línea de 5% - amarilla
+    fig2.add_hline(
+        y=5, 
+        line_dash="dash", 
+        line_color="#ffff00",
+        annotation_text="<b>5%</b>",
+        annotation_position="top right",
+        annotation_font=dict(color='#ffff00', size=14)
+    )
     
     # Encontrar punto crítico donde error = 5%
     delta_5 = find_critical_delta(R, rho, mu, g, (delta_min, delta_max))
     if delta_5 is not None and delta_5 > 0:
-        m_exact_5 = mass_flow_exact(R, delta_5, rho, mu, g)
         error_5 = 5.0
         fig2.add_trace(go.Scatter(
             x=[delta_5*1000],
             y=[error_5],
             mode='markers+text',
-            name=f'δ = {delta_5*1000:.2f} mm',
-            marker=dict(color='#ffff00', size=12, symbol='star'),
-            text=[f"<b>δ = {delta_5*1000:.2f} mm</b>"],
-            textposition="top center"
+            name=f'<b>δ = {delta_5*1000:.2f} mm</b>',
+            marker=dict(color='#ffff00', size=14, symbol='star', line=dict(color='#ffffff', width=2)),
+            text=[f'<b>δ = {delta_5*1000:.2f} mm</b>'],
+            textposition='top center',
+            textfont=dict(color='#ffff00', size=12)
         ))
     
     fig2.update_layout(
-        title=dict(text='Error Relativo vs Espesor de Película', font=dict(color='#ffffff', size=18)),
-        xaxis=dict(title='δ [mm]', color='#ffffff', gridcolor='#333333'),
-        yaxis=dict(title='Error [%]', color='#ffffff', gridcolor='#333333'),
+        title=dict(
+            text='<b>Error Relativo vs Espesor de Película</b>',
+            font=dict(color='#ffffff', size=18),
+            x=0.5
+        ),
+        xaxis=dict(
+            title='<b>δ [mm]</b>',
+            color='#ffffff',
+            gridcolor='#333333',
+            title_font=dict(size=14)
+        ),
+        yaxis=dict(
+            title='<b>Error [%]</b>',
+            color='#ffffff',
+            gridcolor='#333333',
+            title_font=dict(size=14)
+        ),
         paper_bgcolor='#0a0a0a',
         plot_bgcolor='#0a0a0a',
-        font=dict(color='#ffffff'),
-        legend=dict(font=dict(color='#ffffff')),
+        font=dict(color='#ffffff', family='Arial, sans-serif'),
+        legend=dict(
+            font=dict(color='#ffffff'),
+            bgcolor='rgba(10, 10, 10, 0.8)',
+            bordercolor='#00f0ff',
+            borderwidth=1
+        ),
         height=350,
         margin=dict(l=60, r=40, t=50, b=60),
+        hovermode='x'
     )
     
     return fig1, fig2
@@ -512,27 +705,59 @@ with st.sidebar:
     st.markdown("## ⚙️ Parámetros")
     st.markdown("---")
     
-    # Inicializar valores en session_state si no existen
-    if 'reset' not in st.session_state:
-        st.session_state.reset = False
-    
     # Sliders
-    rho = st.slider("Densidad ρ [kg/m³]", min_value=800, max_value=1500, value=1000, step=10)
-    mu = st.slider("Viscosidad μ [Pa·s]", min_value=0.01, max_value=1.00, value=0.10, step=0.01, format="%.2f")
+    rho = st.slider(
+        "Densidad ρ [kg/m³]", 
+        min_value=800, 
+        max_value=1500, 
+        value=1000, 
+        step=10,
+        help="Densidad del fluido"
+    )
+    
+    mu = st.slider(
+        "Viscosidad μ [Pa·s]", 
+        min_value=0.01, 
+        max_value=1.00, 
+        value=0.10, 
+        step=0.01, 
+        format="%.2f",
+        help="Viscosidad dinámica del fluido"
+    )
     
     # Number inputs para geometría
-    R = st.number_input("Radio del tubo R [m]", min_value=0.010, max_value=0.500, value=0.030, step=0.001, format="%.3f")
-    delta = st.number_input("Espesor de película δ [m]", min_value=0.001, max_value=0.050, value=0.003, step=0.001, format="%.3f")
+    R = st.number_input(
+        "Radio del tubo R [m]", 
+        min_value=0.010, 
+        max_value=0.500, 
+        value=0.030, 
+        step=0.001, 
+        format="%.3f",
+        help="Radio externo del tubo"
+    )
+    
+    delta = st.number_input(
+        "Espesor de película δ [m]", 
+        min_value=0.001, 
+        max_value=0.050, 
+        value=0.003, 
+        step=0.001, 
+        format="%.3f",
+        help="Espesor de la película líquida"
+    )
     
     # Botón de reset
     if st.button("🔄 Resetear valores", use_container_width=True):
-        st.session_state.reset = True
         st.rerun()
     
     st.markdown("---")
     st.markdown("### 📊 Estado del sistema")
-    st.markdown(f"**a = (R+δ)/R =** {((R+delta)/R):.4f}")
-    st.markdown(f"**δ/R =** {(delta/R):.4f}")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("a = (R+δ)/R", f"{((R+delta)/R):.4f}")
+    with col2:
+        st.metric("δ/R", f"{(delta/R):.4f}")
     
     if delta/R < 0.1:
         st.success("✅ Aprox. película delgada válida (δ/R < 0.1)")
@@ -561,119 +786,31 @@ st.markdown("---")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.markdown("""
-    <div class="metric-container">
-        <div class="metric-label">Flujo Másico Exacto</div>
-        <div class="metric-value">{:.6f} kg/s</div>
-    </div>
-    """.format(m_exact), unsafe_allow_html=True)
+    st.metric(
+        label="Flujo Másico Exacto",
+        value=f"{m_exact:.6f} kg/s",
+        delta=None
+    )
 
 with col2:
-    st.markdown("""
-    <div class="metric-container">
-        <div class="metric-label">Velocidad Máxima Vz</div>
-        <div class="metric-value">{:.4f} m/s</div>
-    </div>
-    """.format(v_max), unsafe_allow_html=True)
+    st.metric(
+        label="Velocidad Máxima Vz",
+        value=f"{v_max:.4f} m/s",
+        delta=None
+    )
 
 with col3:
-    st.markdown("""
-    <div class="metric-container">
-        <div class="metric-label">Flujo Másico Taylor</div>
-        <div class="metric-value">{:.6f} kg/s</div>
-    </div>
-    """.format(m_taylor), unsafe_allow_html=True)
+    st.metric(
+        label="Flujo Másico Taylor",
+        value=f"{m_taylor:.6f} kg/s",
+        delta=None
+    )
 
 with col4:
-    st.markdown("""
-    <div class="metric-container">
-        <div class="metric-label">Error Relativo</div>
-        <div class="metric-value" style="color: {}">{:.2f} %</div>
-    </div>
-    """.format('#ff6b6b' if error > 5 else '#00f0ff', error), unsafe_allow_html=True)
-
-st.markdown("---")
-
-# --- Pestañas ---
-tab1, tab2 = st.tabs(["📊 Visualización Física", "📈 Análisis de Taylor"])
-
-# --- Tab 1: Visualización Física ---
-with tab1:
-    col_left, col_right = st.columns([1, 1])
-    
-    with col_left:
-        st.markdown("### 🌐 Representación 3D del Sistema")
-        fig_3d = create_3d_visualization(R, delta)
-        st.plotly_chart(fig_3d, use_container_width=True)
-        st.caption("Cilindro interior: tubo sólido | Capa exterior: película líquida (cian translúcido) | Flechas verdes: dirección del flujo")
-    
-    with col_right:
-        st.markdown("### 📈 Perfil de Velocidad Radial")
-        fig_vz = create_velocity_profile(R, delta, rho, mu, g)
-        st.plotly_chart(fig_vz, use_container_width=True)
-        
-        # Métrica de velocidad promedio
-        st.markdown("""
-        <div class="metric-container" style="margin-top: 15px;">
-            <div class="metric-label">Velocidad Promedio ⟨vz⟩</div>
-            <div class="metric-value">{:.4f} m/s</div>
-        </div>
-        """.format(v_avg), unsafe_allow_html=True)
-    
-    # Ecuaciones
-    st.markdown("---")
-    st.markdown("### 📐 Ecuaciones del Modelo Cilíndrico")
-    
-    with st.container():
-        st.markdown("""
-        <div class="equation-box">
-            <h4>Perfil de Velocidad Exacto</h4>
-            $$v_z(r) = \\frac{\\rho g R^2}{4\\mu} \\left[1 - \\left(\\frac{r}{R}\\right)^2 + 2a^2 \\ln\\left(\\frac{r}{R}\\right)\\right]$$
-            
-            <h4>Flujo Másico Exacto</h4>
-            $$\\dot{m} = \\frac{\\pi \\rho^2 g R^4}{8\\mu} \\left[4a^4 \\ln(a) - (3a^4 - 4a^2 + 1)\\right]$$
-            
-            <h4>Velocidad Promedio Exacta</h4>
-            $$\\langle v_z \\rangle = \\frac{\\rho g R^2}{8\\mu} \\left[\\frac{4a^4 \\ln(a)}{a^2 - 1} - (3a^2 - 1)\\right]$$
-            
-            <p style="color: #b0b0b0; margin-top: 10px;">
-                donde \(a = \\frac{R + \\delta}{R}\) y \(R \\leq r \\leq R + \\delta\)
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-# --- Tab 2: Análisis de Taylor ---
-with tab2:
-    # Caja de Taylor
-    st.markdown("""
-    <div class="taylor-box">
-        <p>📐 Aproximación de Taylor (Película Delgada)</p>
-        <p style="font-size: 32px; color: #ffff00 !important;">
-            ṁ ≈ (2πRρ²gδ³) / (3μ)
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    col_left2, col_right2 = st.columns([0.4, 0.6])
-    
-    with col_left2:
-        st.markdown("### 📊 Tabla Comparativa")
-        df_table = generate_taylor_table(R, rho, mu, g, delta)
-        st.dataframe(df_table, use_container_width=True, height=400)
-        st.caption("✅ = valor actual seleccionado en el slider")
-    
-    with col_right2:
-        st.markdown("### 📈 Análisis de Sensibilidad")
-        fig1, fig2 = create_taylor_plots(R, rho, mu, g, delta)
-        
-        st.plotly_chart(fig1, use_container_width=True)
-        st.plotly_chart(fig2, use_container_width=True)
-
-# --- Footer ---
-st.markdown("---")
-st.markdown("""
-<div style="text-align: center; color: #666666; padding: 20px;">
-    Desarrollado con ❤️ para el Curso de Fenómenos de Transporte<br>
-    Basado en Bird, Stewart & Lightfoot - "Transport Phenomena" 2nd Edition
-</div>
-""", unsafe_allow_html=True)
+    color = "#ff6b6b" if error > 5 else "#00f0ff"
+    st.markdown(f"""
+    <div style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+                border: 1px solid {color};
+                border-radius: 10px;
+                padding: 15px;
+                box-shadow: 0 0 30px rgba(0, 240, 
