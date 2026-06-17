@@ -194,63 +194,6 @@ st.markdown("""
     ::-webkit-scrollbar-thumb:hover {
         background: #00d0e0;
     }
-    
-    /* Selectbox en modo oscuro */
-    .stSelectbox div[data-baseweb="select"] {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
-    }
-    
-    /* Checkbox */
-    .stCheckbox label {
-        color: #ffffff !important;
-    }
-    
-    /* Expander */
-    .streamlit-expanderHeader {
-        color: #ffffff !important;
-        background-color: #1a1a1a !important;
-        border: 1px solid #00f0ff !important;
-        border-radius: 5px !important;
-    }
-    
-    /* Info, Warning, Success, Error boxes */
-    .stAlert {
-        background-color: #1a1a1a !important;
-        border-left: 4px solid #00f0ff !important;
-    }
-    
-    .stAlert div {
-        color: #ffffff !important;
-    }
-    
-    /* Captions y textos pequeños */
-    .stCaption, .caption {
-        color: #888888 !important;
-    }
-    
-    /* Métricas custom (para velocidad promedio) */
-    .custom-metric {
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%) !important;
-        border: 1px solid #00f0ff !important;
-        border-radius: 10px !important;
-        padding: 15px !important;
-        margin: 10px 0 !important;
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.05) !important;
-    }
-    
-    .custom-metric .label {
-        color: #b0b0b0 !important;
-        font-size: 14px !important;
-        font-weight: 400 !important;
-    }
-    
-    .custom-metric .value {
-        color: #00f0ff !important;
-        font-size: 28px !important;
-        font-weight: 700 !important;
-        text-shadow: 0 0 30px rgba(0, 240, 255, 0.2) !important;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -309,8 +252,7 @@ def find_critical_delta(R, rho, mu, g, delta_range):
             errors.append(100.0)
     
     # Interpolación para encontrar delta al 5%
-    valid_indices = [i for i, e in enumerate(errors) if e > 5]
-    if valid_indices and errors[0] > 5:
+    if errors and errors[0] > 5:
         for i in range(len(errors) - 1):
             if errors[i] >= 5 and errors[i+1] <= 5:
                 delta_i = deltas[i]
@@ -356,24 +298,22 @@ def create_3d_visualization(R, delta):
     # Crear figura
     fig = go.Figure()
     
-    # Cilindro interno (tubo) - gris oscuro con gradiente
+    # Cilindro interno (tubo) - gris oscuro
     fig.add_trace(go.Surface(
         x=x_tube, y=y_tube, z=z_tube,
         colorscale=[[0, '#333333'], [0.5, '#555555'], [1, '#777777']],
         opacity=1.0,
         showscale=False,
-        name='Tubo interno',
-        hovertemplate='<b>Tubo interno</b><br>Radio: %{x:.3f}<extra></extra>'
+        name='Tubo interno'
     ))
     
     # Película líquida - translúcida cian
     fig.add_trace(go.Surface(
         x=x_film, y=y_film, z=z_film_grid,
-        colorscale=[[0, 'rgba(0, 240, 255, 0.2)'], [0.5, 'rgba(0, 200, 255, 0.3)'], [1, 'rgba(0, 150, 255, 0.4)']],
+        colorscale=[[0, 'rgba(0, 240, 255, 0.2)'], [1, 'rgba(0, 150, 255, 0.4)']],
         opacity=0.4,
         showscale=False,
-        name='Película líquida',
-        hovertemplate='<b>Película líquida</b><br>Radio: %{x:.3f}<extra></extra>'
+        name='Película líquida'
     ))
     
     # Flechas de velocidad (conos) - verde neón
@@ -385,8 +325,7 @@ def create_3d_visualization(R, delta):
             showscale=False,
             name='Dirección del flujo',
             sizemode='absolute',
-            sizeref=0.2,
-            hovertemplate='<b>Flujo descendente</b><extra></extra>'
+            sizeref=0.2
         ))
     
     # Layout
@@ -397,17 +336,14 @@ def create_3d_visualization(R, delta):
             zaxis=dict(title='Z', color='#ffffff', gridcolor='#333333', backgroundcolor='#0a0a0a'),
             bgcolor='#0a0a0a',
             aspectmode='data',
-            camera=dict(
-                eye=dict(x=1.5, y=1.5, z=0.5),
-                up=dict(x=0, y=0, z=1)
-            )
+            camera=dict(eye=dict(x=1.5, y=1.5, z=0.5), up=dict(x=0, y=0, z=1))
         ),
         paper_bgcolor='#0a0a0a',
         plot_bgcolor='#0a0a0a',
-        font=dict(color='#ffffff', family='Arial, sans-serif'),
+        font=dict(color='#ffffff'),
         margin=dict(l=0, r=0, t=20, b=0),
         showlegend=False,
-        height=500,
+        height=500
     )
     
     return fig
@@ -427,76 +363,35 @@ def create_velocity_profile(R, delta, rho, mu, g):
         fill='tozeroy',
         fillcolor='rgba(0, 240, 255, 0.15)',
         line=dict(color='#00f0ff', width=3),
-        name='v_z(r)',
-        hovertemplate='<b>r = %{x:.2f} mm</b><br>v_z = %{y:.4f} m/s<extra></extra>'
+        name='v_z(r)'
     ))
     
-    # Línea vertical para R (pared del tubo)
-    fig.add_vline(
-        x=R*1000, 
-        line_dash="dash", 
-        line_color="#ffffff",
-        annotation_text=f"<b>R = {R*1000:.1f} mm</b>",
-        annotation_position="top",
-        annotation_font=dict(color='#ffffff', size=12)
-    )
+    # Líneas verticales
+    fig.add_vline(x=R*1000, line_dash="dash", line_color="#ffffff", 
+                  annotation_text=f"<b>R = {R*1000:.1f} mm</b>", annotation_position="top")
+    fig.add_vline(x=(R+delta)*1000, line_dash="dash", line_color="#00f0ff",
+                  annotation_text=f"<b>R+δ = {(R+delta)*1000:.1f} mm</b>", annotation_position="bottom")
     
-    # Línea vertical para R+delta (superficie libre)
-    fig.add_vline(
-        x=(R+delta)*1000, 
-        line_dash="dash", 
-        line_color="#00f0ff",
-        annotation_text=f"<b>R+δ = {(R+delta)*1000:.1f} mm</b>",
-        annotation_position="bottom",
-        annotation_font=dict(color='#00f0ff', size=12)
-    )
-    
-    # Añadir punto de velocidad máxima
+    # Punto de velocidad máxima
     v_max = max_velocity(R, delta, rho, mu, g)
     fig.add_trace(go.Scatter(
-        x=[(R+delta)*1000],
-        y=[v_max],
+        x=[(R+delta)*1000], y=[v_max],
         mode='markers',
         marker=dict(color='#ffff00', size=12, symbol='star', line=dict(color='#ffffff', width=2)),
-        name='Vz máx',
-        hovertemplate='<b>Vz máx = %{y:.4f} m/s</b><extra></extra>'
+        name='Vz máx'
     ))
     
     fig.update_layout(
-        title=dict(
-            text='<b>Perfil de Velocidad Radial Vz(r)</b>',
-            font=dict(color='#ffffff', size=20),
-            x=0.5
-        ),
-        xaxis=dict(
-            title='<b>r [mm]</b>',
-            color='#ffffff',
-            gridcolor='#333333',
-            gridwidth=1,
-            zerolinecolor='#444444',
-            title_font=dict(size=14)
-        ),
-        yaxis=dict(
-            title='<b>v_z [m/s]</b>',
-            color='#ffffff',
-            gridcolor='#333333',
-            gridwidth=1,
-            zerolinecolor='#444444',
-            title_font=dict(size=14)
-        ),
+        title=dict(text='<b>Perfil de Velocidad Radial Vz(r)</b>', font=dict(color='#ffffff', size=20), x=0.5),
+        xaxis=dict(title='<b>r [mm]</b>', color='#ffffff', gridcolor='#333333'),
+        yaxis=dict(title='<b>v_z [m/s]</b>', color='#ffffff', gridcolor='#333333'),
         paper_bgcolor='#0a0a0a',
         plot_bgcolor='#0a0a0a',
-        font=dict(color='#ffffff', family='Arial, sans-serif'),
+        font=dict(color='#ffffff'),
         showlegend=True,
-        legend=dict(
-            font=dict(color='#ffffff'),
-            bgcolor='rgba(10, 10, 10, 0.8)',
-            bordercolor='#00f0ff',
-            borderwidth=1
-        ),
+        legend=dict(font=dict(color='#ffffff'), bgcolor='rgba(10, 10, 10, 0.8)'),
         height=400,
-        margin=dict(l=60, r=40, t=60, b=60),
-        hovermode='x'
+        margin=dict(l=60, r=40, t=60, b=60)
     )
     
     return fig
@@ -518,150 +413,58 @@ def create_taylor_plots(R, rho, mu, g, current_delta):
         m_exact_list.append(m_exact)
         m_taylor_list.append(m_taylor)
         if m_exact > 0:
-            error = abs(m_exact - m_taylor) / m_exact * 100
-            errors.append(error)
+            errors.append(abs(m_exact - m_taylor) / m_exact * 100)
         else:
             errors.append(100)
     
     # Gráfica A: Comparación de flujos másicos
     fig1 = go.Figure()
+    fig1.add_trace(go.Scatter(x=deltas*1000, y=m_exact_list, mode='lines',
+                              name='<b>ṁ exacto</b>', line=dict(color='#00f0ff', width=3)))
+    fig1.add_trace(go.Scatter(x=deltas*1000, y=m_taylor_list, mode='lines',
+                              name='<b>ṁ Taylor</b>', line=dict(color='#ff6b6b', width=3, dash='dash')))
     
-    # Línea exacta - cian neón
-    fig1.add_trace(go.Scatter(
-        x=deltas*1000, y=m_exact_list,
-        mode='lines',
-        name='<b>ṁ exacto</b>',
-        line=dict(color='#00f0ff', width=3),
-        hovertemplate='<b>δ = %{x:.3f} mm</b><br>ṁ exacto = %{y:.6e} kg/s<extra></extra>'
-    ))
-    
-    # Línea Taylor - rojo neón
-    fig1.add_trace(go.Scatter(
-        x=deltas*1000, y=m_taylor_list,
-        mode='lines',
-        name='<b>ṁ Taylor</b>',
-        line=dict(color='#ff6b6b', width=3, dash='dash'),
-        hovertemplate='<b>δ = %{x:.3f} mm</b><br>ṁ Taylor = %{y:.6e} kg/s<extra></extra>'
-    ))
-    
-    # Marcador del punto actual - amarillo neón
     m_exact_current = mass_flow_exact(R, current_delta, rho, mu, g)
-    m_taylor_current = mass_flow_taylor(R, current_delta, rho, mu, g)
-    fig1.add_trace(go.Scatter(
-        x=[current_delta*1000],
-        y=[m_exact_current],
-        mode='markers',
-        name='<b>Operación actual</b>',
-        marker=dict(
-            color='#ffff00', 
-            size=15, 
-            symbol='circle', 
-            line=dict(color='#ffffff', width=3)
-        ),
-        hovertemplate='<b>δ = %{x:.3f} mm</b><br>ṁ = %{y:.6e} kg/s<extra></extra>'
-    ))
+    fig1.add_trace(go.Scatter(x=[current_delta*1000], y=[m_exact_current], mode='markers',
+                              name='<b>Operación actual</b>',
+                              marker=dict(color='#ffff00', size=15, symbol='circle', line=dict(color='#ffffff', width=3))))
     
     fig1.update_layout(
-        title=dict(
-            text='<b>Flujo Másico vs Espesor de Película</b>',
-            font=dict(color='#ffffff', size=18),
-            x=0.5
-        ),
-        xaxis=dict(
-            title='<b>δ [mm]</b>',
-            color='#ffffff',
-            gridcolor='#333333',
-            title_font=dict(size=14)
-        ),
-        yaxis=dict(
-            title='<b>ṁ [kg/s]</b>',
-            color='#ffffff',
-            gridcolor='#333333',
-            title_font=dict(size=14)
-        ),
-        paper_bgcolor='#0a0a0a',
-        plot_bgcolor='#0a0a0a',
-        font=dict(color='#ffffff', family='Arial, sans-serif'),
-        legend=dict(
-            font=dict(color='#ffffff'),
-            bgcolor='rgba(10, 10, 10, 0.8)',
-            bordercolor='#00f0ff',
-            borderwidth=1
-        ),
-        height=350,
-        margin=dict(l=60, r=40, t=50, b=60),
-        hovermode='x'
+        title=dict(text='<b>Flujo Másico vs Espesor de Película</b>', font=dict(color='#ffffff', size=18), x=0.5),
+        xaxis=dict(title='<b>δ [mm]</b>', color='#ffffff', gridcolor='#333333'),
+        yaxis=dict(title='<b>ṁ [kg/s]</b>', color='#ffffff', gridcolor='#333333'),
+        paper_bgcolor='#0a0a0a', plot_bgcolor='#0a0a0a',
+        font=dict(color='#ffffff'),
+        legend=dict(font=dict(color='#ffffff'), bgcolor='rgba(10, 10, 10, 0.8)'),
+        height=350, margin=dict(l=60, r=40, t=50, b=60)
     )
     
     # Gráfica B: Error relativo
     fig2 = go.Figure()
+    fig2.add_trace(go.Scatter(x=deltas*1000, y=errors, mode='lines',
+                              name='<b>Error relativo</b>',
+                              fill='tozeroy', fillcolor='rgba(255, 105, 180, 0.2)',
+                              line=dict(color='#ff69b4', width=3)))
+    fig2.add_hline(y=5, line_dash="dash", line_color="#ffff00",
+                   annotation_text="<b>5%</b>", annotation_position="top right")
     
-    # Error con relleno rosa neón
-    fig2.add_trace(go.Scatter(
-        x=deltas*1000, y=errors,
-        mode='lines',
-        name='<b>Error relativo</b>',
-        fill='tozeroy',
-        fillcolor='rgba(255, 105, 180, 0.2)',
-        line=dict(color='#ff69b4', width=3),
-        hovertemplate='<b>δ = %{x:.3f} mm</b><br>Error = %{y:.2f} %<extra></extra>'
-    ))
-    
-    # Línea de 5% - amarilla
-    fig2.add_hline(
-        y=5, 
-        line_dash="dash", 
-        line_color="#ffff00",
-        annotation_text="<b>5%</b>",
-        annotation_position="top right",
-        annotation_font=dict(color='#ffff00', size=14)
-    )
-    
-    # Encontrar punto crítico donde error = 5%
     delta_5 = find_critical_delta(R, rho, mu, g, (delta_min, delta_max))
     if delta_5 is not None and delta_5 > 0:
-        error_5 = 5.0
-        fig2.add_trace(go.Scatter(
-            x=[delta_5*1000],
-            y=[error_5],
-            mode='markers+text',
-            name=f'<b>δ = {delta_5*1000:.2f} mm</b>',
-            marker=dict(color='#ffff00', size=14, symbol='star', line=dict(color='#ffffff', width=2)),
-            text=[f'<b>δ = {delta_5*1000:.2f} mm</b>'],
-            textposition='top center',
-            textfont=dict(color='#ffff00', size=12)
-        ))
+        fig2.add_trace(go.Scatter(x=[delta_5*1000], y=[5.0], mode='markers+text',
+                                  name=f'<b>δ = {delta_5*1000:.2f} mm</b>',
+                                  marker=dict(color='#ffff00', size=14, symbol='star'),
+                                  text=[f'<b>δ = {delta_5*1000:.2f} mm</b>'],
+                                  textposition='top center',
+                                  textfont=dict(color='#ffff00', size=12)))
     
     fig2.update_layout(
-        title=dict(
-            text='<b>Error Relativo vs Espesor de Película</b>',
-            font=dict(color='#ffffff', size=18),
-            x=0.5
-        ),
-        xaxis=dict(
-            title='<b>δ [mm]</b>',
-            color='#ffffff',
-            gridcolor='#333333',
-            title_font=dict(size=14)
-        ),
-        yaxis=dict(
-            title='<b>Error [%]</b>',
-            color='#ffffff',
-            gridcolor='#333333',
-            title_font=dict(size=14)
-        ),
-        paper_bgcolor='#0a0a0a',
-        plot_bgcolor='#0a0a0a',
-        font=dict(color='#ffffff', family='Arial, sans-serif'),
-        legend=dict(
-            font=dict(color='#ffffff'),
-            bgcolor='rgba(10, 10, 10, 0.8)',
-            bordercolor='#00f0ff',
-            borderwidth=1
-        ),
-        height=350,
-        margin=dict(l=60, r=40, t=50, b=60),
-        hovermode='x'
+        title=dict(text='<b>Error Relativo vs Espesor de Película</b>', font=dict(color='#ffffff', size=18), x=0.5),
+        xaxis=dict(title='<b>δ [mm]</b>', color='#ffffff', gridcolor='#333333'),
+        yaxis=dict(title='<b>Error [%]</b>', color='#ffffff', gridcolor='#333333'),
+        paper_bgcolor='#0a0a0a', plot_bgcolor='#0a0a0a',
+        font=dict(color='#ffffff'),
+        legend=dict(font=dict(color='#ffffff'), bgcolor='rgba(10, 10, 10, 0.8)'),
+        height=350, margin=dict(l=60, r=40, t=50, b=60)
     )
     
     return fig1, fig2
@@ -678,81 +481,33 @@ def generate_taylor_table(R, rho, mu, g, current_delta):
     for d in deltas_compare:
         m_exact = mass_flow_exact(R, d, rho, mu, g)
         m_taylor = mass_flow_taylor(R, d, rho, mu, g)
-        if m_exact > 0:
-            error = abs(m_exact - m_taylor) / m_exact * 100
-        else:
-            error = 100
+        error = abs(m_exact - m_taylor) / m_exact * 100 if m_exact > 0 else 100
         is_current = (abs(d - current_delta) < 1e-8)
         data.append({
-            'δ [mm]': d*1000,
-            'ṁ exacto [kg/s]': m_exact,
-            'ṁ Taylor [kg/s]': m_taylor,
-            'Error [%]': error,
+            'δ [mm]': f"{d*1000:.4f}",
+            'ṁ exacto [kg/s]': f"{m_exact:.6e}",
+            'ṁ Taylor [kg/s]': f"{m_taylor:.6e}",
+            'Error [%]': f"{error:.2f}",
             'Actual': '✅' if is_current else ''
         })
     
-    df = pd.DataFrame(data)
-    # Formatear números
-    df['ṁ exacto [kg/s]'] = df['ṁ exacto [kg/s]'].apply(lambda x: f"{x:.6e}")
-    df['ṁ Taylor [kg/s]'] = df['ṁ Taylor [kg/s]'].apply(lambda x: f"{x:.6e}")
-    df['Error [%]'] = df['Error [%]'].apply(lambda x: f"{x:.2f}")
-    df['δ [mm]'] = df['δ [mm]'].apply(lambda x: f"{x:.4f}")
-    
-    return df
+    return pd.DataFrame(data)
 
 # --- Sidebar de parámetros ---
 with st.sidebar:
     st.markdown("## ⚙️ Parámetros")
     st.markdown("---")
     
-    # Sliders
-    rho = st.slider(
-        "Densidad ρ [kg/m³]", 
-        min_value=800, 
-        max_value=1500, 
-        value=1000, 
-        step=10,
-        help="Densidad del fluido"
-    )
+    rho = st.slider("Densidad ρ [kg/m³]", min_value=800, max_value=1500, value=1000, step=10)
+    mu = st.slider("Viscosidad μ [Pa·s]", min_value=0.01, max_value=1.00, value=0.10, step=0.01, format="%.2f")
+    R = st.number_input("Radio del tubo R [m]", min_value=0.010, max_value=0.500, value=0.030, step=0.001, format="%.3f")
+    delta = st.number_input("Espesor de película δ [m]", min_value=0.001, max_value=0.050, value=0.003, step=0.001, format="%.3f")
     
-    mu = st.slider(
-        "Viscosidad μ [Pa·s]", 
-        min_value=0.01, 
-        max_value=1.00, 
-        value=0.10, 
-        step=0.01, 
-        format="%.2f",
-        help="Viscosidad dinámica del fluido"
-    )
-    
-    # Number inputs para geometría
-    R = st.number_input(
-        "Radio del tubo R [m]", 
-        min_value=0.010, 
-        max_value=0.500, 
-        value=0.030, 
-        step=0.001, 
-        format="%.3f",
-        help="Radio externo del tubo"
-    )
-    
-    delta = st.number_input(
-        "Espesor de película δ [m]", 
-        min_value=0.001, 
-        max_value=0.050, 
-        value=0.003, 
-        step=0.001, 
-        format="%.3f",
-        help="Espesor de la película líquida"
-    )
-    
-    # Botón de reset
     if st.button("🔄 Resetear valores", use_container_width=True):
         st.rerun()
     
     st.markdown("---")
     st.markdown("### 📊 Estado del sistema")
-    
     col1, col2 = st.columns(2)
     with col1:
         st.metric("a = (R+δ)/R", f"{((R+delta)/R):.4f}")
@@ -765,18 +520,12 @@ with st.sidebar:
         st.warning("⚠️ Aprox. película delgada no válida (δ/R > 0.1)")
 
 # --- Cálculos principales ---
-g = 9.81  # Aceleración de gravedad
-
-# Calcular métricas
+g = 9.81
 m_exact = mass_flow_exact(R, delta, rho, mu, g)
 m_taylor = mass_flow_taylor(R, delta, rho, mu, g)
 v_max = max_velocity(R, delta, rho, mu, g)
 v_avg = average_velocity_exact(R, delta, rho, mu, g)
-
-if m_exact > 0:
-    error = abs(m_exact - m_taylor) / m_exact * 100
-else:
-    error = 0
+error = abs(m_exact - m_taylor) / m_exact * 100 if m_exact > 0 else 0
 
 # --- Cabecera principal con métricas ---
 st.markdown("## 🌊 Flujo en Película Cilíndrica Descendente")
@@ -784,33 +533,94 @@ st.markdown("### Bird, Stewart & Lightfoot - Problema 2B.6")
 st.markdown("---")
 
 col1, col2, col3, col4 = st.columns(4)
-
 with col1:
-    st.metric(
-        label="Flujo Másico Exacto",
-        value=f"{m_exact:.6f} kg/s",
-        delta=None
-    )
-
+    st.metric("Flujo Másico Exacto", f"{m_exact:.6f} kg/s")
 with col2:
-    st.metric(
-        label="Velocidad Máxima Vz",
-        value=f"{v_max:.4f} m/s",
-        delta=None
-    )
-
+    st.metric("Velocidad Máxima Vz", f"{v_max:.4f} m/s")
 with col3:
-    st.metric(
-        label="Flujo Másico Taylor",
-        value=f"{m_taylor:.6f} kg/s",
-        delta=None
-    )
-
+    st.metric("Flujo Másico Taylor", f"{m_taylor:.6f} kg/s")
 with col4:
     color = "#ff6b6b" if error > 5 else "#00f0ff"
-    st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-                border: 1px solid {color};
-                border-radius: 10px;
-                padding: 15px;
-                box-shadow: 0 0 30px rgba(0, 240, 
+    st.metric("Error Relativo", f"{error:.2f} %", delta=None)
+
+st.markdown("---")
+
+# --- Pestañas ---
+tab1, tab2 = st.tabs(["📊 Visualización Física", "📈 Análisis de Taylor"])
+
+# --- Tab 1: Visualización Física ---
+with tab1:
+    col_left, col_right = st.columns([1, 1])
+    
+    with col_left:
+        st.markdown("### 🌐 Representación 3D del Sistema")
+        fig_3d = create_3d_visualization(R, delta)
+        st.plotly_chart(fig_3d, use_container_width=True)
+        st.caption("Cilindro interior: tubo sólido | Capa exterior: película líquida (cian) | Flechas verdes: flujo")
+    
+    with col_right:
+        st.markdown("### 📈 Perfil de Velocidad Radial")
+        fig_vz = create_velocity_profile(R, delta, rho, mu, g)
+        st.plotly_chart(fig_vz, use_container_width=True)
+        
+        # Métrica custom para velocidad promedio
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+                    border: 1px solid #00f0ff; border-radius: 10px; padding: 15px; margin-top: 15px;">
+            <div style="color: #b0b0b0; font-size: 14px;">Velocidad Promedio ⟨vz⟩</div>
+            <div style="color: #00f0ff; font-size: 28px; font-weight: 700; 
+                        text-shadow: 0 0 30px rgba(0, 240, 255, 0.2);">{v_avg:.4f} m/s</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Ecuaciones
+    st.markdown("---")
+    st.markdown("### 📐 Ecuaciones del Modelo Cilíndrico")
+    st.markdown("""
+    <div class="equation-box">
+        <h4>Perfil de Velocidad Exacto</h4>
+        $$v_z(r) = \\frac{\\rho g R^2}{4\\mu} \\left[1 - \\left(\\frac{r}{R}\\right)^2 + 2a^2 \\ln\\left(\\frac{r}{R}\\right)\\right]$$
+        
+        <h4>Flujo Másico Exacto</h4>
+        $$\\dot{m} = \\frac{\\pi \\rho^2 g R^4}{8\\mu} \\left[4a^4 \\ln(a) - (3a^4 - 4a^2 + 1)\\right]$$
+        
+        <h4>Velocidad Promedio Exacta</h4>
+        $$\\langle v_z \\rangle = \\frac{\\rho g R^2}{8\\mu} \\left[\\frac{4a^4 \\ln(a)}{a^2 - 1} - (3a^2 - 1)\\right]$$
+        
+        <p style="color: #b0b0b0;">donde \(a = \\frac{R + \\delta}{R}\) y \(R \\leq r \\leq R + \\delta\)</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# --- Tab 2: Análisis de Taylor ---
+with tab2:
+    st.markdown("""
+    <div class="taylor-box">
+        <p>📐 Aproximación de Taylor (Película Delgada)</p>
+        <p style="font-size: 32px; color: #ffff00 !important;">
+            ṁ ≈ (2πRρ²gδ³) / (3μ)
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col_left2, col_right2 = st.columns([0.4, 0.6])
+    
+    with col_left2:
+        st.markdown("### 📊 Tabla Comparativa")
+        df_table = generate_taylor_table(R, rho, mu, g, delta)
+        st.dataframe(df_table, use_container_width=True, height=400)
+        st.caption("✅ = valor actual")
+    
+    with col_right2:
+        st.markdown("### 📈 Análisis de Sensibilidad")
+        fig1, fig2 = create_taylor_plots(R, rho, mu, g, delta)
+        st.plotly_chart(fig1, use_container_width=True)
+        st.plotly_chart(fig2, use_container_width=True)
+
+# --- Footer ---
+st.markdown("---")
+st.markdown("""
+<div style="text-align: center; color: #666666; padding: 20px;">
+    Desarrollado con ❤️ para Fenómenos de Transporte<br>
+    Basado en Bird, Stewart & Lightfoot - "Transport Phenomena" 2nd Edition
+</div>
+""", unsafe_allow_html=True)
