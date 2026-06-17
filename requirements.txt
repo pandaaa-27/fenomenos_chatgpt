@@ -1,4 +1,6 @@
 numpy
-plotly
+plotly.graph_objects
+plotly.express
+plotly.subplots
 pandas
-scipy=
+scipy
